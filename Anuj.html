@@ -1,0 +1,851 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Supriya ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family: "Segoe UI", sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, #ff4d6d33, transparent 30%),
+        radial-gradient(circle at 80% 80%, #c9184a33, transparent 30%),
+        linear-gradient(135deg,#090014,#18001f,#250015);
+    color:white;
+    overflow:hidden;
+}
+
+/* Stars */
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+}
+
+.star{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:50%;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle{
+    from{opacity:.2; transform:scale(.7);}
+    to{opacity:1; transform:scale(1.4);}
+}
+
+/* Main */
+.container{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.card{
+    width:min(500px,95%);
+    min-height:560px;
+    padding:35px 25px;
+    border-radius:30px;
+    text-align:center;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(18px);
+    box-shadow:0 0 50px #ff2d5533;
+    position:relative;
+    overflow:hidden;
+}
+
+/* Heart */
+.heart-box{
+    position:relative;
+    width:180px;
+    height:160px;
+    margin:20px auto 35px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.heart{
+    width:130px;
+    height:130px;
+    background:#ff174f;
+    transform:rotate(-45deg);
+    position:absolute;
+    animation:heartbeat 1.3s infinite;
+    box-shadow:0 0 35px #ff174f;
+}
+
+.heart:before,
+.heart:after{
+    content:"";
+    width:130px;
+    height:130px;
+    background:#ff174f;
+    border-radius:50%;
+    position:absolute;
+}
+
+.heart:before{
+    top:-65px;
+    left:0;
+}
+
+.heart:after{
+    top:0;
+    left:65px;
+}
+
+.heart-text{
+    position:relative;
+    z-index:2;
+    font-size:25px;
+    font-weight:bold;
+    text-shadow:0 2px 10px #000;
+}
+
+@keyframes heartbeat{
+    0%,100%{transform:rotate(-45deg) scale(1);}
+    50%{transform:rotate(-45deg) scale(1.08);}
+}
+
+h1{
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+.subtitle{
+    color:#ffc2d1;
+    line-height:1.6;
+    font-size:16px;
+    margin-bottom:25px;
+}
+
+.message{
+    min-height:100px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:19px;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+.buttons{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+button{
+    border:none;
+    padding:14px 18px;
+    border-radius:30px;
+    font-size:16px;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(135deg,#ff174f,#c9184a);
+    box-shadow:0 8px 20px #ff174f33;
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 12px 25px #ff174f66;
+}
+
+button:active{
+    transform:scale(.96);
+}
+
+.back{
+    margin-top:18px;
+    background:rgba(255,255,255,.1);
+    box-shadow:none;
+    font-size:14px;
+}
+
+.progress{
+    position:absolute;
+    top:0;
+    left:0;
+    height:4px;
+    background:#ff477e;
+    width:0%;
+    transition:.5s;
+}
+
+.small{
+    font-size:13px;
+    color:#ffb3c6;
+    margin-top:18px;
+}
+
+/* Floating hearts */
+.floating-heart{
+    position:fixed;
+    bottom:-30px;
+    font-size:20px;
+    animation:floatUp 5s linear forwards;
+    pointer-events:none;
+}
+
+@keyframes floatUp{
+    0%{
+        transform:translateY(0) scale(.7);
+        opacity:0;
+    }
+    15%{opacity:1;}
+    100%{
+        transform:translateY(-110vh) rotate(360deg);
+        opacity:0;
+    }
+}
+
+.fade{
+    animation:fade .45s ease;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:translateY(15px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.final-heart{
+    font-size:75px;
+    animation:heartbeat 1.2s infinite;
+    margin:20px;
+}
+
+@media(max-width:500px){
+    .card{
+        min-height:540px;
+        padding:25px 18px;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .message{
+        font-size:17px;
+    }
+
+    button{
+        font-size:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+<div class="card">
+
+<div class="progress" id="progress"></div>
+
+<div id="app"></div>
+
+</div>
+</div>
+
+<script>
+
+/* =========================
+   STAR GENERATOR
+========================= */
+
+const stars = document.getElementById("stars");
+
+for(let i=0;i<90;i++){
+
+    const star=document.createElement("div");
+    star.className="star";
+
+    star.style.left=Math.random()*100+"%";
+    star.style.top=Math.random()*100+"%";
+
+    star.style.animationDelay=(Math.random()*3)+"s";
+
+    const size=Math.random()*3+1;
+    star.style.width=size+"px";
+    star.style.height=size+"px";
+
+    stars.appendChild(star);
+}
+
+
+/* =========================
+   APP
+========================= */
+
+const app=document.getElementById("app");
+const progress=document.getElementById("progress");
+
+let currentPage=0;
+
+
+/* =========================
+   FLOATING HEARTS
+========================= */
+
+function createHeart(){
+
+    const heart=document.createElement("div");
+
+    heart.className="floating-heart";
+
+    const hearts=["❤️","💖","💕","💗","💓","🥰"];
+
+    heart.innerHTML=hearts[Math.floor(Math.random()*hearts.length)];
+
+    heart.style.left=Math.random()*100+"%";
+
+    heart.style.animationDuration=(4+Math.random()*3)+"s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },7000);
+}
+
+setInterval(createHeart,900);
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(content){
+
+    app.innerHTML=`
+        <div class="fade">
+            ${content}
+        </div>
+    `;
+
+    progress.style.width=((currentPage/9)*100)+"%";
+}
+
+
+/* =========================
+   FIRST PAGE
+========================= */
+
+function page1(){
+
+currentPage=1;
+
+render(`
+
+<div class="heart-box">
+
+    <div class="heart"></div>
+
+    <div class="heart-text">
+        Hi Supriya ❤️
+    </div>
+
+</div>
+
+<h1>Ek chhoti si baat...</h1>
+
+<div class="subtitle">
+    Zyada kuch nahi kehna hai,<br>
+    bas thoda sa dil ki baat karni hai. 🥺
+</div>
+
+<div class="buttons">
+
+<button onclick="page2()">
+    💌 Bolo, kya baat hai?
+</button>
+
+<button onclick="page2()">
+    😏 Haan haan, bolo...
+</button>
+
+</div>
+
+<p class="small">
+    Don't worry, koi boring speech nahi hai 😂
+</p>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 2
+========================= */
+
+function page2(){
+
+currentPage=2;
+
+render(`
+
+<h1>Sabse pehle... 😊</h1>
+
+<div class="message">
+    Hi Supriya, kaisi ho?
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Theek hoon 😊')">
+    😊 Theek hoon
+</button>
+
+<button onclick="reply('Tumhe kya matlab? 😏')">
+    😏 Tumhe kya matlab?
+</button>
+
+<button onclick="reply('Ab yaad aayi meri? 😂')">
+    😂 Ab yaad aayi meri?
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 3
+========================= */
+
+function page3(){
+
+currentPage=3;
+
+render(`
+
+<h1>Waise... 🏠</h1>
+
+<div class="message">
+    Ghar par sab kaise hain?<br>
+    Sab theek hai na? ❤️
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Haan, sab theek hain ❤️')">
+    ❤️ Haan, sab theek hain
+</button>
+
+<button onclick="reply('Sab theek hain, tum batao?')">
+    😊 Sab theek hain, tum batao?
+</button>
+
+<button onclick="reply('Pehle tum apna batao 😏')">
+    😏 Pehle tum apna batao
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 4
+========================= */
+
+function page4(){
+
+currentPage=4;
+
+render(`
+
+<h1>Ab asli baat... 🥺</h1>
+
+<div class="message">
+    Sorry yaar...<br>
+    Galti meri hi hai.
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Koi baat nahi ❤️')">
+    ❤️ Koi baat nahi
+</button>
+
+<button onclick="reply('Haan, galti toh tumhari hi hai 😤')">
+    😤 Haan, galti tumhari hi hai
+</button>
+
+<button onclick="reply('Sorry bolne se sab theek nahi hoga 😶')">
+    😶 Abhi maaf nahi kiya
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 5
+========================= */
+
+function page5(){
+
+currentPage=5;
+
+render(`
+
+<h1>Bas ek request... 💌</h1>
+
+<div class="message">
+    Main tumse koi lamba reply nahi chahta.<br><br>
+    Bas itna keh do —<br>
+    <b>“Maaf kar diya.”</b> 🥺
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Maaf kar diya ❤️')">
+    ❤️ Maaf kar diya
+</button>
+
+<button onclick="reply('Sochungi 😏')">
+    😏 Sochungi
+</button>
+
+<button onclick="reply('Abhi nahi 😂')">
+    😂 Abhi nahi
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 6
+========================= */
+
+function page6(){
+
+currentPage=6;
+
+render(`
+
+<h1>Ek baat sach mein... 💭</h1>
+
+<div class="message">
+    Mujhe pehli baar aisa feel hua<br>
+    ki meri wajah se kisi ke trust ko hurt hua hai.
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Haan, thoda hurt hua tha')">
+    🥺 Haan, thoda hurt hua tha
+</button>
+
+<button onclick="reply('Ab rehne do, jo hua so hua')">
+    ❤️ Ab rehne do
+</button>
+
+<button onclick="reply('Ab tumhe samajh aa gaya na?')">
+    😌 Ab samajh aa gaya na?
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 7
+========================= */
+
+function page7(){
+
+currentPage=7;
+
+render(`
+
+<h1>Dil se sorry ❤️</h1>
+
+<div class="message">
+    Ye feeling mujhe bilkul achhi nahi lagi...<br><br>
+    Isliye dil se sorry yaar. ❤️
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Theek hai, samajh gayi ❤️')">
+    ❤️ Theek hai
+</button>
+
+<button onclick="reply('Achha, maan liya sorry 😌')">
+    😌 Maan liya sorry
+</button>
+
+<button onclick="reply('Dekhte hain kitna genuine hai 😏')">
+    😏 Dekhte hain
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 8
+========================= */
+
+function page8(){
+
+currentPage=8;
+
+render(`
+
+<h1>Waise madam ji... 😏</h1>
+
+<div class="message">
+    Mujhe pata hai tum pehle<br>
+    message karne wali nahi thi... 😂
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Haan, main nahi karti 😂')">
+    😂 Haan, main nahi karti
+</button>
+
+<button onclick="reply('Tumhe kaise pata? 😏')">
+    😏 Tumhe kaise pata?
+</button>
+
+<button onclick="reply('Kar bhi deti, bas time lagta 😌')">
+    😌 Kar bhi deti
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   PAGE 9
+========================= */
+
+function page9(){
+
+currentPage=9;
+
+render(`
+
+<h1>Isliye... 📱</h1>
+
+<div class="message">
+    Socha aaj main hi message kar leta hoon. ❤️
+</div>
+
+<div class="buttons">
+
+<button onclick="reply('Achha kiya 😊')">
+    😊 Achha kiya
+</button>
+
+<button onclick="reply('Warna main toh nahi karne wali thi 😂')">
+    😂 Warna main nahi karti
+</button>
+
+<button onclick="reply('Itni bhi kya jaldi thi? 😏')">
+    😏 Itni kya jaldi thi?
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   FINAL QUESTION
+========================= */
+
+function finalPage(){
+
+currentPage=10;
+
+render(`
+
+<div class="final-heart">
+    ❤️
+</div>
+
+<h1>Madam Ji... 😏</h1>
+
+<div class="message">
+    Kya abhi bhi naraz ho?
+</div>
+
+<div class="buttons">
+
+<button onclick="happyEnd()">
+    ❤️ Nahi, ab nahi
+</button>
+
+<button onclick="happyEnd()">
+    😏 Thodi si
+</button>
+
+<button onclick="happyEnd()">
+    😤 Haan, abhi bhi
+</button>
+
+<button onclick="happyEnd()">
+    😂 Tum manao, phir sochungi
+</button>
+
+</div>
+
+`);
+
+}
+
+
+/* =========================
+   RESPONSE POPUP PAGE
+========================= */
+
+function reply(text){
+
+currentPage++;
+
+render(`
+
+<div class="final-heart">
+    💕
+</div>
+
+<h1>Achhaaa... 😌</h1>
+
+<div class="message">
+    "${text}"
+</div>
+
+<div class="buttons">
+
+<button onclick="nextPage()">
+    💌 Aage suno...
+</button>
+
+</div>
+
+`);
+
+}
+
+
+function nextPage(){
+
+if(currentPage<=2) page3();
+else if(currentPage===3) page4();
+else if(currentPage===4) page5();
+else if(currentPage===5) page6();
+else if(currentPage===6) page7();
+else if(currentPage===7) page8();
+else if(currentPage===8) page9();
+else finalPage();
+
+}
+
+
+/* =========================
+   HAPPY END
+========================= */
+
+function happyEnd(){
+
+currentPage=11;
+
+for(let i=0;i<15;i++){
+    setTimeout(createHeart,i*120);
+}
+
+render(`
+
+<div class="final-heart">
+    💖
+</div>
+
+<h1>Finally! 🥹❤️</h1>
+
+<div class="message">
+
+    Thank you madam ji 😌❤️<br><br>
+
+    Ab gussa thoda kam kar do,<br>
+    aur ek cute si smile kar do. 😊<br><br>
+
+    <b>Friendship > Ego</b> ❤️
+
+</div>
+
+<button onclick="restart()">
+    🔄 Phir se shuru karein
+</button>
+
+`);
+
+}
+
+
+/* =========================
+   RESTART
+========================= */
+
+function restart(){
+
+currentPage=0;
+page1();
+
+}
+
+
+/* START */
+
+page1();
+
+</script>
+
+</body>
+</html>
+```
